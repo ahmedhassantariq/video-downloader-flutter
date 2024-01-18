@@ -1,11 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:scanner/components/controlsModel.dart';
 import '../../components/customTextfield.dart';
 import '../../controllers/youtubeController.dart';
+import '../redirectScreen.dart';
 class YoutubePage extends StatefulWidget {
-  const YoutubePage({super.key});
+ final ControlsModel controls;
+  const YoutubePage({
+    super.key,
+    required this.controls,
+  });
 
   @override
   State<YoutubePage> createState() => _YoutubePageState();
@@ -17,19 +25,17 @@ class _YoutubePageState extends State<YoutubePage> {
 
   searchUrl(){
     if(_searchFieldEditor.text.isNotEmpty){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> YoutubeController(videoID: _searchFieldEditor.text)));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> YoutubeController(videoID: _searchFieldEditor.text, controls: widget.controls,)));
     }
   }
 
 
   late BannerAd bannerAd;
   bool isLoaded = false;
-  var adUnit = "ca-app-pub-3940256099942544/6300978111";
-
   initBannerAd(){
     bannerAd = BannerAd(
         size: AdSize.largeBanner,
-        adUnitId: adUnit,
+        adUnitId: widget.controls.homePageAdUnitID,
         listener: BannerAdListener(
           onAdLoaded: (ad){
             setState(() {
@@ -51,9 +57,22 @@ class _YoutubePageState extends State<YoutubePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initBannerAd();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      checkRedirect();
+    });
+    if(defaultTargetPlatform == TargetPlatform.android) {
+      if(widget.controls.showHomePageAd) {
+        initBannerAd();
+      }
+    }
   }
 
+
+  checkRedirect(){
+    if(widget.controls.isRedirect){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> RedirectScreen(controls: widget.controls,)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

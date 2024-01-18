@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:scanner/pages/homePage.dart';
 import 'package:scanner/pages/youtube/youtubePage.dart';
+
+import '../components/controlsModel.dart';
+import '../controllers/firebase_services.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -13,38 +14,56 @@ class SplashScreen extends StatefulWidget {
 
 
 class _SplashScreenState extends State<SplashScreen> {
-  bool isLoading = false;
-  Future<void> waitForSplash() async {
+  late Future<ControlsModel> controls;
 
-    await Future.delayed(const Duration(seconds: 1));
-    if(!isLoading){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const YoutubePage() ));
-    }
-  }
 
 
   @override
   void initState() {
     super.initState();
-    waitForSplash();
+    controls = FirebaseServices().getControls();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(FontAwesomeIcons.download, size: 100, color: Colors.red,),
-          SizedBox(height: 16),
-          CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            strokeWidth: 5,
-            strokeCap: StrokeCap.round,
-            color: Colors.red,
-          )
-        ],
+    return Scaffold(
+      body: Center(
+        child: FutureBuilder(
+            future: controls,
+            builder: (builder, snapshot){
+              if(snapshot.hasError){
+                return const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Video Downloader", style: TextStyle(color: Colors.red, fontSize: 36, fontWeight: FontWeight.w700)),
+                    SizedBox(height: 8.0),
+                    Text("An Error has Occurred!", style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w600)),
+                  ],
+                );
+              }
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Video Downloader", style: TextStyle(color: Colors.red, fontSize: 36, fontWeight: FontWeight.w700)),
+                    SizedBox(height: 8.0),
+                    CircularProgressIndicator(color: Colors.red, strokeWidth: 7.0, strokeCap: StrokeCap.round,)
+                  ],
+                );
+              }
+              return !snapshot.data!.isReview ? YoutubePage(controls: snapshot.requireData,) : const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("Video Downloader", style: TextStyle(color: Colors.red, fontSize: 36, fontWeight: FontWeight.w700)),
+                  SizedBox(height: 8.0),
+                  CircularProgressIndicator(color: Colors.red, strokeWidth: 7.0, strokeCap: StrokeCap.round,)
+                ],
+              );
+            }),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
@@ -9,6 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:scanner/components/controlsModel.dart';
+import 'package:scanner/controllers/playerScreen.dart';
 import 'package:scanner/model/data.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +20,9 @@ import 'package:http/http.dart' as http;
 
 class YoutubeController extends StatefulWidget {
   final String? videoID;
+  final ControlsModel controls;
   const YoutubeController({
+    required this.controls,
     required this.videoID,
     super.key});
 
@@ -31,12 +36,11 @@ class _YoutubeControllerState extends State<YoutubeController> {
 
   late BannerAd bannerAd;
   bool isLoaded = false;
-  var adUnit = "ca-app-pub-3940256099942544/6300978111";
 
   initBannerAd(){
     bannerAd = BannerAd(
         size: AdSize.largeBanner,
-        adUnitId: adUnit,
+        adUnitId: widget.controls.listPageAdUnitID,
         listener: BannerAdListener(
           onAdLoaded: (ad){
             setState(() {
@@ -53,19 +57,23 @@ class _YoutubeControllerState extends State<YoutubeController> {
   }
 
   Future<DataModel>getYoutubeInfo() async {
-    print(widget.videoID);
     final res = await http.get(Uri.parse("https://downloader-six.vercel.app/api/getVideoInfo/?url=${widget.videoID}"));
-    print(res.body);
     return DataModel.fromJson(jsonDecode(res.body));
   }
   late Future<DataModel> futureStream;
   @override
   void initState() {
     futureStream = getYoutubeInfo();
-    initBannerAd();
+    if(defaultTargetPlatform == TargetPlatform.android) {
+      if(widget.controls.showListPageAd) {
+        initBannerAd();
+      }
+    }
     super.initState();
 
   }
+
+
 
   @override
   void dispose() {
@@ -174,8 +182,10 @@ class _YoutubeControllerState extends State<YoutubeController> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text.rich(TextSpan(text: snapshot.data!.formats[index]['format'].toString())),
                                   Text.rich(TextSpan(text: snapshot.data!.formats[index]['ext'].toString())),
+                                  CupertinoButton(child: const Icon(CupertinoIcons.play_arrow_solid, color: Colors.red,), onPressed: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyScreen(url: snapshot.data!.formats[index]['url'])));
+                                  }),
                                   CupertinoButton(
                                       padding: const EdgeInsets.all(8.0), onPressed: () {
                                         download(

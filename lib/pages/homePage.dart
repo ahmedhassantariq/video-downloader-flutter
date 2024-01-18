@@ -1,8 +1,12 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:scanner/components/controlsModel.dart';
+import 'package:scanner/pages/redirectScreen.dart';
 import 'package:scanner/pages/twitch/twitchPage.dart';
 import 'package:scanner/pages/xTwitter/xTwitterPage.dart';
 import 'package:scanner/pages/youtube/youtubePage.dart';
@@ -11,7 +15,10 @@ import 'instagram/instagramPage.dart';
 
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final ControlsModel controls;
+  const HomePage({
+    required this.controls,
+    super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -46,7 +53,20 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initBannerAd();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      checkRedirect();
+    });
+    if(defaultTargetPlatform == TargetPlatform.android) {
+      if(widget.controls.showHomePageAd) {
+        initBannerAd();
+      }
+    }
+  }
+
+  checkRedirect(){
+    if(widget.controls.isRedirect){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> RedirectScreen(controls: widget.controls,)));
+    }
   }
 
 
@@ -69,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                       Icon(FontAwesomeIcons.youtube, color: Colors.red),
                       SizedBox(width: 8.0),
                       Text("Youtube", style: TextStyle(color: Colors.red))],), onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const YoutubePage()));
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=>const YoutubePage()));
               }),
               CupertinoButton(
                   child: const Row(
