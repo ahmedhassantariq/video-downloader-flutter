@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "849436606485",
+    "project_id": "twitchvideodownloader",
+    "storage_bucket": "twitchvideodownloader.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849436606485:android:0ead4da3b487829b270e1c",
+        "android_client_info": {
+          "package_name": "com.example.scanner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKbz1EeJYUQJekwsM9VlIk1RH9jC0HZxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849436606485:android:0231d658166458ec270e1c",
+        "android_client_info": {
+          "package_name": "com.tvdownloader.twitch_video_downloader"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKbz1EeJYUQJekwsM9VlIk1RH9jC0HZxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

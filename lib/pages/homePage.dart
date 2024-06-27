@@ -1,16 +1,16 @@
 
+import 'package:download/pages/redirectScreen.dart';
+import 'package:download/pages/twitch/twitchPage.dart';
+import 'package:download/pages/xTwitter/xTwitterPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:scanner/components/controlsModel.dart';
-import 'package:scanner/pages/redirectScreen.dart';
-import 'package:scanner/pages/twitch/twitchPage.dart';
-import 'package:scanner/pages/xTwitter/xTwitterPage.dart';
-import 'package:scanner/pages/youtube/youtubePage.dart';
 
+
+import '../components/controlsModel.dart';
 import 'instagram/instagramPage.dart';
 
 

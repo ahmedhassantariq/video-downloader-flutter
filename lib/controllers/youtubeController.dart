@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:download/controllers/playerScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scanner/components/controlsModel.dart';
-import 'package:scanner/controllers/playerScreen.dart';
-import 'package:scanner/model/data.dart';
+
 import 'package:http/http.dart' as http;
+
+import '../components/controlsModel.dart';
+import '../model/data.dart';
 
 
 

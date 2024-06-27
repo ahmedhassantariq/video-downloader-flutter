@@ -1,10 +1,10 @@
+import 'package:download/pages/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:scanner/pages/splashScreen.dart';
 
 import 'firebase_options.dart';
 

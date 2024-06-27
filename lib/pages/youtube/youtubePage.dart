@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:scanner/components/controlsModel.dart';
+import '../../components/controlsModel.dart';
 import '../../components/customTextfield.dart';
 import '../../controllers/youtubeController.dart';
 import '../redirectScreen.dart';
